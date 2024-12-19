@@ -5,6 +5,7 @@ import com.example.userservice.dto.UserLoginRequest;
 import com.example.userservice.dto.UserResponse;
 import com.example.userservice.model.User;
 import com.example.userservice.repository.UserRepository;
+import jakarta.annotation.PostConstruct;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -22,6 +23,32 @@ public class UserService {
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    @PostConstruct
+    public void loadData() {
+        if (userRepository.count() <= 0) {
+            User user1 = new User();
+            user1.setUsername("johndoe");
+            user1.setEmail("john@example.com");
+            user1.setPassword("secret");
+            user1.setBio("I love cooking and sharing recipes.");
+            user1.setProfilePicture("https://example.com/john.jpg");
+            user1.setCreatedAt(Instant.now());
+            user1.setUpdatedAt(Instant.now());
+
+            User user2 = new User();
+            user2.setUsername("janedoe");
+            user2.setEmail("jane@example.com");
+            user2.setPassword("secret");
+            user2.setBio("Pastry chef and dessert lover.");
+            user2.setProfilePicture("https://example.com/jane.jpg");
+            user2.setCreatedAt(Instant.now());
+            user2.setUpdatedAt(Instant.now());
+
+            userRepository.save(user1);
+            userRepository.save(user2);
+        }
     }
 
     public UserResponse registerUser(UserCreateRequest request) {
