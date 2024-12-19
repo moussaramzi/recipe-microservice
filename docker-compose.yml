@@ -71,6 +71,24 @@ services:
     ports:
       - "8083:8083"
 
+  api-gateway:
+    image: api-gateway:latest
+    container_name: api-gateway
+    depends_on:
+      - user-service
+      - recipe-service
+      - comment-service
+    build:
+      context: ./api-gateway
+    environment:
+      USER_SERVICE_BASEURL: user-service:8081
+      RECIPE_SERVICE_BASEURL: recipe-service:8082
+      COMMENT_SERVICE_BASEURL: comment-service:8083
+
+    ports:
+      - "8080:8080"
+
+
 volumes:
   mongodb_data:
   mongodb_comments_data:
