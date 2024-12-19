@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+  # MongoDB for User-Service
   mongodb:
     image: mongo:latest
     container_name: mongodb
@@ -8,6 +9,19 @@ services:
       MONGO_INITDB_DATABASE: userservice
     ports:
       - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  # MongoDB for Comment-Service
+  mongodb-comments:
+    image: mongo:latest
+    container_name: mongodb-comments
+    environment:
+      MONGO_INITDB_DATABASE: commentservice
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongodb_comments_data:/data/db
 
   user-service:
     image: user-service:latest
@@ -44,6 +58,20 @@ services:
     ports:
       - "8082:8082"
 
+  comment-service:
+    image: comment-service:latest
+    container_name: comment-service
+    depends_on:
+      - mongodb-comments
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb-comments:27017/commentservice
+      - userservice.url=http://user-service:8081
+      - recipeservice.url=http://recipe-service:8082
+
+    ports:
+      - "8083:8083"
+
 volumes:
   mongodb_data:
+  mongodb_comments_data:
   mysql_data:
