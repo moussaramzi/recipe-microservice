@@ -1,0 +1,48 @@
+
+services:
+  # MongoDB for the user-service
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_DATABASE: userservice
+    ports:
+      - "27017:27017"
+
+  user-service:
+    image: user-service:latest
+    container_name: user-service
+    depends_on:
+      - mongodb
+    environment:
+      # Point to the MongoDB container for the user-service database
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/userservice
+    ports:
+      - "8081:8081"
+
+  # MySQL for the recipe-service
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: abc123
+    ports:
+      - 3307:3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+
+  recipe-service:
+    image: recipe-service:latest
+    container_name: recipe-service
+    depends_on:
+      - mysql
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/recipedb?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=abc123
+    ports:
+      - "8082:8082"
+volumes:
+  mongodb_data:
+  mysql_data:
