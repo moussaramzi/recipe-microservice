@@ -3,10 +3,12 @@ package com.example.recipeservice.service;
 import com.example.recipeservice.dto.RecipeCreateRequest;
 import com.example.recipeservice.dto.RecipeResponse;
 import com.example.recipeservice.dto.RecipeUpdateRequest;
+import com.example.recipeservice.dto.UserDto;
 import com.example.recipeservice.model.Recipe;
 import com.example.recipeservice.repository.RecipeRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
@@ -17,9 +19,14 @@ import java.util.stream.Collectors;
 public class RecipeService {
 
     private final RecipeRepository recipeRepository;
+    private final RestTemplate restTemplate;
+    private final String userServiceUrl;
 
-    public RecipeService(RecipeRepository recipeRepository) {
+    public RecipeService(RecipeRepository recipeRepository, RestTemplate restTemplate,
+                         org.springframework.core.env.Environment env) {
         this.recipeRepository = recipeRepository;
+        this.restTemplate = restTemplate;
+        this.userServiceUrl = env.getProperty("userservice.url", "http://user-service:8081");
     }
 
     public RecipeResponse createRecipe(RecipeCreateRequest request) {
@@ -86,6 +93,17 @@ public class RecipeService {
         response.setTags(recipe.getTags());
         response.setCreatedAt(recipe.getCreatedAt());
         response.setUpdatedAt(recipe.getUpdatedAt());
+
+        // Fetch user info directly in the service
+        if (recipe.getAuthorId() != null && !recipe.getAuthorId().isEmpty()) {
+            try {
+                UserDto user = restTemplate.getForObject(userServiceUrl + "/api/users/" + recipe.getAuthorId(), UserDto.class);
+                response.setAuthor(user);
+            } catch (Exception e) {
+                // If unable to fetch user info, handle the error or leave author as null
+            }
+        }
+
         return response;
     }
 }

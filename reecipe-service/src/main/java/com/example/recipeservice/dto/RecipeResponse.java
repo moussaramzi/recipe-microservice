@@ -16,9 +16,9 @@ public class RecipeResponse {
     private String description;
     private List<String> ingredients;
     private List<String> steps;
-    private String authorId;
     private String category;
     private List<String> tags;
     private Instant createdAt;
     private Instant updatedAt;
+    private UserDto author;
 }
