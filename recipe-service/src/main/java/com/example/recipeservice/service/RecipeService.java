@@ -88,7 +88,6 @@ public class RecipeService {
         response.setDescription(recipe.getDescription());
         response.setIngredients(recipe.getIngredients());
         response.setSteps(recipe.getSteps());
-        response.setAuthorId(recipe.getAuthorId());
         response.setCategory(recipe.getCategory());
         response.setTags(recipe.getTags());
         response.setCreatedAt(recipe.getCreatedAt());
