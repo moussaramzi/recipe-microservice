@@ -42,10 +42,23 @@ public class UserService {
         return mapToResponse(saved);
     }
 
+    public UserResponse getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        return mapToResponse(user);
+    }
+
     public UserResponse getUserById(String id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
         return mapToResponse(user);
+    }
+
+    public void deleteUserById(String id) {
+        if (!userRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+        userRepository.deleteById(id);  // Ensure this is passing a Long
     }
 
     public UserResponse updateUser(String id, UserCreateRequest request) {

@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,9 +40,12 @@ public class CommentService {
         return mapToResponse(saved);
     }
 
-    public List<CommentResponse> getCommentsByRecipeId(String recipeId) {
-        List<Comment> comments = commentRepository.findByRecipeId(recipeId);
-        return comments.stream().map(this::mapToResponse).collect(Collectors.toList());
+
+    public Map<String, List<CommentResponse>> getCommentsByRecipeIds(List<String> recipeIds) {
+        List<Comment> comments = commentRepository.findByRecipeIdIn(recipeIds);
+        return comments.stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.groupingBy(CommentResponse::getRecipeId));
     }
 
     public CommentResponse getCommentById(String id) {

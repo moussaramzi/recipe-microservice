@@ -1,16 +1,12 @@
-package com.example.commentservice.dto;
+package com.example.recipeservice.dto;
 
 import lombok.Data;
-
 import java.time.Instant;
 
 @Data
-public class CommentResponse {
+public class CommentDto {
     private String id;
     private String userId;
-    private UserDto author;
-    private String recipeId;
-    private String recipeTitle;
     private String content;
     private Instant createdAt;
     private Instant updatedAt;

@@ -1,5 +1,6 @@
 package com.example.recipeservice.service;
 
+import com.example.recipeservice.dto.CommentDto;
 import com.example.recipeservice.dto.RecipeCreateRequest;
 import com.example.recipeservice.dto.RecipeResponse;
 import com.example.recipeservice.dto.RecipeUpdateRequest;
@@ -9,12 +10,13 @@ import com.example.recipeservice.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +28,9 @@ public class RecipeService {
 
     @Value("${userservice.url:http://user-service:8081}")
     private String userServiceUrl;
+
+    @Value("${commentservice.url:http://comment-service:8083}")
+    private String commentServiceUrl;
 
     public RecipeResponse createRecipe(RecipeCreateRequest request) {
         Recipe recipe = new Recipe();
@@ -44,8 +49,23 @@ public class RecipeService {
     }
 
     public List<RecipeResponse> getAllRecipes() {
-        return recipeRepository.findAll().stream()
-                .map(this::mapToResponse)
+        List<Recipe> recipes = recipeRepository.findAll();
+
+        // Collect all recipe IDs
+        List<String> recipeIds = recipes.stream()
+                .map(recipe -> recipe.getId().toString())
+                .collect(Collectors.toList());
+
+        // Fetch comments for all recipes in a single batch request
+        Map<String, List<CommentDto>> commentsMap = fetchCommentsForRecipes(recipeIds);
+
+        return recipes.stream()
+                .map(recipe -> {
+                    RecipeResponse response = mapToResponse(recipe);
+                    List<CommentDto> comments = commentsMap.getOrDefault(recipe.getId().toString(), Collections.emptyList());
+                    response.setComments(comments);
+                    return response;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -102,9 +122,24 @@ public class RecipeService {
                 response.setAuthor(user);
             } catch (Exception e) {
                 // Handle the error gracefully, e.g., log it or leave the author as null
+                response.setAuthor(null);
             }
         }
 
         return response;
+    }
+
+    private Map<String, List<CommentDto>> fetchCommentsForRecipes(List<String> recipeIds) {
+        try {
+            return webClient.post()
+                    .uri(commentServiceUrl + "/api/comments/by-recipe-ids")
+                    .bodyValue(recipeIds)
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<Map<String, List<CommentDto>>>() {})
+                    .block();
+        } catch (Exception e) {
+            // Handle the error gracefully, e.g., log it and return an empty map
+            return new HashMap<>();
+        }
     }
 }

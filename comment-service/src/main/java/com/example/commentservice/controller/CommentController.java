@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/comments")
@@ -25,17 +26,15 @@ public class CommentController {
         return commentService.createComment(request);
     }
 
-    // GET /api/comments?recipeId=...
-    @GetMapping
-    public List<CommentResponse> getComments(@RequestParam String recipeId) {
-        return commentService.getCommentsByRecipeId(recipeId);
-    }
-
     @GetMapping("/{id}")
     public CommentResponse getCommentById(@PathVariable String id) {
         return commentService.getCommentById(id);
     }
 
+    @PostMapping("/by-recipe-ids")
+    public Map<String, List<CommentResponse>> getCommentsByRecipeIds(@RequestBody List<String> recipeIds) {
+        return commentService.getCommentsByRecipeIds(recipeIds);
+    }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

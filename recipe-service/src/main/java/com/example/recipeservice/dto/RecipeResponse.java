@@ -20,5 +20,8 @@ public class RecipeResponse {
     private List<String> tags;
     private Instant createdAt;
     private Instant updatedAt;
+    private  String authorId;
     private UserDto author;
+    private List<CommentDto> comments;
+
 }

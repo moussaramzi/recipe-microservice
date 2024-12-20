@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # MongoDB for User-Service
   mongodb:
@@ -39,6 +37,8 @@ services:
   user-service:
     image: user-service:latest
     container_name: user-service
+    build:
+      context: ./user-service
     depends_on:
       - mongodb
     environment:
@@ -52,11 +52,14 @@ services:
   recipe-service:
     image: recipe-service:latest
     container_name: recipe-service
+    build:
+      context: ./recipe-service
     depends_on:
       - mysql
       - user-service
     environment:
       USER_SERVICE_BASEURL: http://user-service:8081
+      COMMENT_SERVICE_BASEURL: http://comment-service:8083
       MYSQL_DB_USERNAME: root
       MYSQL_DB_PASSWORD: abc123
       MYSQL_DB_HOST: mysql
@@ -68,6 +71,8 @@ services:
   comment-service:
     image: comment-service:latest
     container_name: comment-service
+    build:
+      context: ./comment-service
     depends_on:
       - mongodb-comments
     environment:
@@ -82,12 +87,12 @@ services:
   api-gateway:
     image: api-gateway:latest
     container_name: api-gateway
+    build:
+      context: ./api-gateway
     depends_on:
       - user-service
       - recipe-service
       - comment-service
-    build:
-      context: ./api-gateway
     environment:
       USER_SERVICE_BASEURL: user-service:8081
       RECIPE_SERVICE_BASEURL: recipe-service:8082
