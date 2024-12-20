@@ -26,11 +26,6 @@ public class UserController {
         return userService.registerUser(request);
     }
 
-    @PostMapping("/login")
-    public UserResponse login(@Validated @RequestBody UserLoginRequest request) {
-        return userService.login(request);
-    }
-
     @GetMapping("/{id}")
     public UserResponse getUser(@PathVariable String id) {
         return userService.getUserById(id);

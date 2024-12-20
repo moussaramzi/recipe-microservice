@@ -18,8 +18,6 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
-    // In a real application, you would inject a PasswordEncoder for secure password hashing:
-    // @Autowired private PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -33,7 +31,6 @@ public class UserService {
         User user = new User();
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
-        // In real scenario: user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setPassword(request.getPassword());
         user.setBio(request.getBio());
         user.setProfilePicture(request.getProfilePicture());
@@ -43,18 +40,6 @@ public class UserService {
         User saved = userRepository.save(user);
 
         return mapToResponse(saved);
-    }
-
-    public UserResponse login(UserLoginRequest request) {
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials"));
-
-        // In a real scenario, you'd compare password hashes.
-        if (!user.getPassword().equals(request.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
-        }
-
-        return mapToResponse(user);
     }
 
     public UserResponse getUserById(String id) {
@@ -74,7 +59,6 @@ public class UserService {
 
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
-        // user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setPassword(request.getPassword());
         user.setBio(request.getBio());
         user.setProfilePicture(request.getProfilePicture());
