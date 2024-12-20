@@ -63,9 +63,6 @@ This project is a recipe platform built using a microservices architecture. It c
    - Add comments to recipes.
    - View comments with the username and profile picture of the commenter.
 
-### Admin Features
-- Admins can manage recipes and comments, including deleting inappropriate content.
-
 ## Technologies Used
 
 ### Backend
