@@ -127,8 +127,5 @@ This project is a recipe platform built using a microservices architecture. It c
 - Implement real-time notifications for comments.
 - Add role-based access control for admin features.
 
-## Contributors
-- **Moussa Ramzi**: Backend, Frontend, and Architecture Design.
 
-Feel free to contribute by submitting issues or pull requests!
 
