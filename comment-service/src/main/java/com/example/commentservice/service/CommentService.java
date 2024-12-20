@@ -3,10 +3,11 @@ package com.example.commentservice.service;
 import com.example.commentservice.dto.*;
 import com.example.commentservice.model.Comment;
 import com.example.commentservice.repository.CommentRepository;
-import org.springframework.core.env.Environment;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
@@ -14,19 +15,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final RestTemplate restTemplate;
-    private final String userServiceUrl;
-    private final String recipeServiceUrl;
+    private final WebClient webClient;
 
-    public CommentService(CommentRepository commentRepository, RestTemplate restTemplate, Environment env) {
-        this.commentRepository = commentRepository;
-        this.restTemplate = restTemplate;
-        this.userServiceUrl = env.getProperty("userservice.url", "http://user-service:8081");
-        this.recipeServiceUrl = env.getProperty("recipeservice.url", "http://recipe-service:8082");
-    }
+    @Value("${userservice.url:http://user-service:8081}")
+    private String userServiceUrl;
+
+    @Value("${recipeservice.url:http://recipe-service:8082}")
+    private String recipeServiceUrl;
 
     public CommentResponse createComment(CommentCreateRequest request) {
         Comment comment = new Comment();
@@ -51,7 +50,6 @@ public class CommentService {
         return mapToResponse(comment);
     }
 
-
     public void deleteComment(String id) {
         if (!commentRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Comment not found");
@@ -68,25 +66,33 @@ public class CommentService {
         response.setCreatedAt(comment.getCreatedAt());
         response.setUpdatedAt(comment.getUpdatedAt());
 
-        // Fetch user info
+        // Fetch user info using WebClient
         if (comment.getUserId() != null && !comment.getUserId().isEmpty()) {
             try {
-                UserDto user = restTemplate.getForObject(userServiceUrl + "/api/users/" + comment.getUserId(), UserDto.class);
+                UserDto user = webClient.get()
+                        .uri(userServiceUrl + "/api/users/{id}", comment.getUserId())
+                        .retrieve()
+                        .bodyToMono(UserDto.class)
+                        .block();
                 response.setAuthor(user);
             } catch (Exception e) {
-                // If cannot fetch user, just leave author as null or handle error gracefully
+                // Handle error gracefully, leave author as null
             }
         }
 
-        // Fetch recipe info
+        // Fetch recipe info using WebClient
         if (comment.getRecipeId() != null && !comment.getRecipeId().isEmpty()) {
             try {
-                RecipeDto recipe = restTemplate.getForObject(recipeServiceUrl + "/api/recipes/" + comment.getRecipeId(), RecipeDto.class);
+                RecipeDto recipe = webClient.get()
+                        .uri(recipeServiceUrl + "/api/recipes/{id}", comment.getRecipeId())
+                        .retrieve()
+                        .bodyToMono(RecipeDto.class)
+                        .block();
                 if (recipe != null) {
                     response.setRecipeTitle(recipe.getTitle());
                 }
             } catch (Exception e) {
-                // If cannot fetch recipe, leave recipeTitle as null or handle error
+                // Handle error gracefully, leave recipeTitle as null
             }
         }
 

@@ -23,27 +23,32 @@ services:
     volumes:
       - mongodb_comments_data:/data/db
 
+  # MySQL  for Recipe-Service
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: abc123
+      MYSQL_DATABASE: recipe_platform_db
+    ports:
+      - 3307:3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  # User Service
   user-service:
     image: user-service:latest
     container_name: user-service
     depends_on:
       - mongodb
     environment:
-      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/userservice
+      MONGODB_PORT: 27017
+      MONGODB_HOST: mongodb
     ports:
       - "8081:8081"
 
-  mysql:
-    image: mysql:8.0
-    container_name: mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: abc123
-      MYSQL_DATABASE: recipedb
-    ports:
-      - "3307:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
 
+  # Recipe Service
   recipe-service:
     image: recipe-service:latest
     container_name: recipe-service
@@ -51,26 +56,29 @@ services:
       - mysql
       - user-service
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/recipedb?createDatabaseIfNotExist=true
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=abc123
-      - userservice.url=http://user-service:8081
+      USER_SERVICE_BASEURL: http://user-service:8081
+      MYSQL_DB_USERNAME: root
+      MYSQL_DB_PASSWORD: abc123
+      MYSQL_DB_HOST: mysql
+      MYSQL_DB_PORT: 3306
     ports:
       - "8082:8082"
 
+  # Comment Service
   comment-service:
     image: comment-service:latest
     container_name: comment-service
     depends_on:
       - mongodb-comments
     environment:
-      - SPRING_DATA_MONGODB_URI=mongodb://mongodb-comments:27017/commentservice
-      - userservice.url=http://user-service:8081
-      - recipeservice.url=http://recipe-service:8082
-
+      MONGODB_PORT: 27017
+      MONGODB_HOST: mongodb-comments
+      USER_SERVICE_BASEURL: http://user-service:8081
+      RECIPE_SERVICE_BASEURL: http://recipe-service:8082
     ports:
       - "8083:8083"
 
+  # Api Gateway
   api-gateway:
     image: api-gateway:latest
     container_name: api-gateway
@@ -88,7 +96,7 @@ services:
     ports:
       - "8080:8080"
 
-
+# Volumes
 volumes:
   mongodb_data:
   mongodb_comments_data:

@@ -6,9 +6,11 @@ import com.example.recipeservice.dto.RecipeUpdateRequest;
 import com.example.recipeservice.dto.UserDto;
 import com.example.recipeservice.model.Recipe;
 import com.example.recipeservice.repository.RecipeRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
@@ -16,18 +18,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class RecipeService {
 
     private final RecipeRepository recipeRepository;
-    private final RestTemplate restTemplate;
-    private final String userServiceUrl;
+    private final WebClient webClient;
 
-    public RecipeService(RecipeRepository recipeRepository, RestTemplate restTemplate,
-                         org.springframework.core.env.Environment env) {
-        this.recipeRepository = recipeRepository;
-        this.restTemplate = restTemplate;
-        this.userServiceUrl = env.getProperty("userservice.url", "http://user-service:8081");
-    }
+    @Value("${userservice.url:http://user-service:8081}")
+    private String userServiceUrl;
 
     public RecipeResponse createRecipe(RecipeCreateRequest request) {
         Recipe recipe = new Recipe();
@@ -93,13 +91,17 @@ public class RecipeService {
         response.setCreatedAt(recipe.getCreatedAt());
         response.setUpdatedAt(recipe.getUpdatedAt());
 
-        // Fetch user info directly in the service
+        // Fetch user info asynchronously using WebClient
         if (recipe.getAuthorId() != null && !recipe.getAuthorId().isEmpty()) {
             try {
-                UserDto user = restTemplate.getForObject(userServiceUrl + "/api/users/" + recipe.getAuthorId(), UserDto.class);
+                UserDto user = webClient.get()
+                        .uri(userServiceUrl + "/api/users/{id}", recipe.getAuthorId())
+                        .retrieve()
+                        .bodyToMono(UserDto.class)
+                        .block();
                 response.setAuthor(user);
             } catch (Exception e) {
-                // If unable to fetch user info, handle the error or leave author as null
+                // Handle the error gracefully, e.g., log it or leave the author as null
             }
         }
 
