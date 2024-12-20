@@ -81,8 +81,7 @@ This project is a recipe platform built using a microservices architecture. It c
 ### Infrastructure
 - API Gateway for request routing and security.
 - Docker for containerization.
-- Kubernetes for deployment and scaling.
-
+  
 ## Installation and Setup
 
 1. Clone the repository:
