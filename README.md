@@ -5,8 +5,9 @@ This project is a recipe platform built using a microservices architecture. It c
 ## Project Structure
 
 ### Recipe Service
+
 - **Description**: This service handles all operations related to recipes, including creation, retrieval, updating, and deletion.
-- **Database**: SQL (e.g., PostgreSQL or MySQL).
+- **Database**: SQL (MySQL).
 - **Key Features**:
   - Add new recipes with details like title, description, ingredients, steps, category, and tags.
   - Update existing recipes.
@@ -15,6 +16,7 @@ This project is a recipe platform built using a microservices architecture. It c
   - Fetch recipes along with associated comments and author information.
 
 ### Comment Service
+
 - **Description**: This service manages comments on recipes, allowing users to leave feedback.
 - **Database**: MongoDB.
 - **Key Features**:
@@ -23,11 +25,13 @@ This project is a recipe platform built using a microservices architecture. It c
   - Fetch all comments associated with multiple recipe IDs in a single request.
 
 ### User Service
+
 - **Description**: This service handles user-related operations such as registration and retrieval of user information.
-- **Database**: SQL (e.g., PostgreSQL or MySQL).
+- **Database**: MongoDB.
 - **Key Features**:
   - Register new users with details such as username, email, and profile picture.
   - Retrieve user information by email or ID.
+
 
 ### API Gateway
 - **Description**: The API Gateway serves as the entry point for all client requests and routes them to the appropriate microservice. It also manages OAuth2 authentication and token verification.
@@ -37,9 +41,11 @@ This project is a recipe platform built using a microservices architecture. It c
   - Enable CORS for frontend communication.
 
 ## Databases Used
-- **Recipe Service**: SQL database (e.g., PostgreSQL or MySQL).
+
+- **Recipe Service**: SQL database (MySQL).
 - **Comment Service**: MongoDB for flexible and scalable comment storage.
-- **User Service**: SQL database (e.g., PostgreSQL or MySQL).
+- **User Service**: MongoDB for user data.
+
 
 ## Features
 
@@ -72,8 +78,8 @@ This project is a recipe platform built using a microservices architecture. It c
 - Google One-Tap for login functionality.
 
 ### Databases
-- PostgreSQL/MySQL for Recipe and User services.
-- MongoDB for the Comment service.
+- MySQL for the Recipe service.
+- MongoDB for the Comment and User services.
 
 ### Infrastructure
 - API Gateway for request routing and security.
