@@ -86,7 +86,8 @@ This project is a recipe platform built using a microservices architecture. It c
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo.git
+   git clone https://github.com/moussaramzi/recipe-microservice.git
+   cd recipe-microservice
    ```
 
 2. Build and run the microservices:
@@ -95,12 +96,10 @@ This project is a recipe platform built using a microservices architecture. It c
    docker-compose up
    ```
 
-3. Run the Angular frontend:
-   ```bash
-   cd recipe-frontend
-   npm install
-   ng serve
-   ```
+3. Frontend Setup
+  The frontend for this project is available in a separate repository. Please follow the instructions in the                
+  [microservice-  frontend GitHub repository](https://github.com/moussaramzi/microservice-fontend) to set up and run the 
+  frontend application. 
 
 4. Access the application:
    - Frontend: `http://localhost:4200`
@@ -124,10 +123,6 @@ This project is a recipe platform built using a microservices architecture. It c
 - `GET /api/users?email={email}`: Fetch user details by email.
 - `POST /api/users`: Register a new user.
 
-## Future Enhancements
-- Add advanced filtering and sorting for recipes.
-- Implement real-time notifications for comments.
-- Add role-based access control for admin features.
 
 
 
