@@ -1,0 +1,151 @@
+.recipes-container {
+    width: 80%;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+  }
+  
+  .recipe-card {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .profile-picture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .user-name {
+    font-weight: bold;
+  }
+  
+  .comments-section {
+    margin-top: 20px;
+  }
+  
+  .comment {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .comment-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+  }
+  
+  .comment-content img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  
+  .comment-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .comment p {
+    margin: 0;
+    font-size: 1rem;
+  }
+  
+  .comment-form {
+    margin-top: 10px;
+  }
+  
+  .comment-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    resize: vertical;
+  }
+  
+  .comment-form button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .comment-form button:hover {
+    background-color: #0056b3;
+  }
+  
+  .delete-button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-left: 10px;
+    border-radius: 4px;
+  }
+  
+  .delete-button:hover {
+    background-color: darkred;
+  }
+  .add-recipe-button {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+  }
+  
+  .btn-add-recipe {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .btn-add-recipe:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+  }
+  
+  .btn-add-recipe:active {
+    background-color: #1e7e34;
+    transform: scale(1);
+  }
+  .btn-edit-recipe {
+    background-color: #ffc107;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .btn-edit-recipe:hover {
+    background-color: #e0a800;
+    transform: scale(1.05);
+  }
+  
+  .btn-edit-recipe:active {
+    background-color: #d39e00;
+    transform: scale(1);
+  }
+  
+  

@@ -1,0 +1,12 @@
+<div class="add-recipe-container">
+  <h1>{{ isEditMode ? 'Edit Recipe' : 'Add a New Recipe' }}</h1>
+  <form (ngSubmit)="saveRecipe()">
+    <input type="text" [(ngModel)]="newRecipe.title" name="title" placeholder="Title" required />
+    <textarea [(ngModel)]="newRecipe.description" name="description" placeholder="Description" required></textarea>
+    <input type="text" [(ngModel)]="newRecipe.ingredients" name="ingredients" placeholder="Ingredients (comma-separated)" required />
+    <textarea [(ngModel)]="newRecipe.steps" name="steps" placeholder="Steps (separate with periods)" required></textarea>
+    <input type="text" [(ngModel)]="newRecipe.category" name="category" placeholder="Category" />
+    <input type="text" [(ngModel)]="newRecipe.tags" name="tags" placeholder="Tags (comma-separated)" />
+    <button type="submit">{{ isEditMode ? 'Update Recipe' : 'Add Recipe' }}</button>
+  </form>
+</div>

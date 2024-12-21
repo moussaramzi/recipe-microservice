@@ -101,6 +101,13 @@ services:
     ports:
       - "8080:8080"
 
+  frontend:
+    build:
+      context: ./recipe
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+
 # Volumes
 volumes:
   mongodb_data:

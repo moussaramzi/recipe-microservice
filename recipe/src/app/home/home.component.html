@@ -1,0 +1,95 @@
+<div class="recipes-container">
+  <h1>Recipes</h1>
+
+  <!-- Add Recipe Button (Visible Only When Logged In) -->
+  <div class="add-recipe-button" *ngIf="currentUser">
+    <button (click)="navigateToAddRecipe()" class="btn-add-recipe">
+      Add Recipe
+    </button>
+  </div>
+
+  <div *ngFor="let recipe of recipes" class="recipe-card">
+    <!-- User Info -->
+    <div class="user-info">
+      <img
+        [src]="recipe.author?.profilePicture || 'assets/default-profile.png'"
+        alt="Profile Picture"
+        class="profile-picture"
+        (error)="replaceWithPlaceholder($event)"
+      />
+
+      <span class="user-name">{{
+        recipe.author?.username || "Unknown User"
+      }}</span>
+    </div>
+
+    <!-- Recipe Title -->
+    <h2>{{ recipe.title }}</h2>
+    <p>{{ recipe.description }}</p>
+
+    <h3>Ingredients</h3>
+    <ul>
+      <li *ngFor="let ingredient of recipe.ingredients">{{ ingredient }}</li>
+    </ul>
+
+    <h3>Steps</h3>
+    <ol>
+      <li *ngFor="let step of recipe.steps">{{ step }}</li>
+    </ol>
+    <!-- Edit Button: Only show if the recipe belongs to the current user -->
+  <button
+  *ngIf="currentUser && recipe.author?.id === currentUser.id"
+  (click)="navigateToEditRecipe(recipe)"
+  class="btn-edit-recipe"
+>
+  Edit
+</button>
+
+    <!-- Comment Section -->
+    <div class="comments-section">
+      <h3>Comments</h3>
+
+      <div *ngFor="let comment of recipe.comments" class="comment">
+        <div class="comment-content">
+          <img
+            [src]="comment.author?.profilePicture || 'assets/default-profile.png'"
+            alt="Profile Picture"
+            class="profile-picture"
+            (error)="replaceWithPlaceholder($event)"
+          />
+          <div class="comment-text">
+            <p>
+              <strong>{{ comment.author?.username || 'Unknown User' }}:</strong>
+              {{ comment.content }}
+            </p>
+          </div>
+        </div>
+        <button
+          *ngIf="currentUser && comment.userId === currentUser.id"
+          (click)="deleteComment(recipe.id, comment.id)"
+          class="delete-button"
+        >
+          Delete
+        </button>
+      </div>
+      
+
+      <!-- Comment Form: Only visible if the user is logged in -->
+      <form class="comment-form" *ngIf="currentUser">
+        <textarea
+          [(ngModel)]="newComments[recipe.id]"
+          placeholder="Add a comment..."
+          rows="3"
+          name="comment"
+        ></textarea>
+        <button type="button" (click)="postComment(recipe.id)">
+          Post Comment
+        </button>
+      </form>
+
+      <p *ngIf="!currentUser" class="login-prompt">
+        Please log in to add a comment.
+      </p>
+    </div>
+  </div>
+</div>

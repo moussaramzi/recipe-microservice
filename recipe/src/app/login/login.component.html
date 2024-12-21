@@ -1,0 +1,15 @@
+<nav class="navbar">
+    <div class="navbar-title">Recipe Book</div>
+    <div class="navbar-login">
+      <!-- Show Google Sign-In button when not logged in -->
+      <div *ngIf="!user" id="google-signin-button"></div>
+  
+      <!-- Show profile picture and Logout button when logged in -->
+      <div *ngIf="user" class="user-info">
+        <img [src]="user.profilePicture || 'assets/default-profile.png'" alt="Profile Picture" class="profile-picture" />
+        <span class="user-name">{{ user.username }}</span>
+        <button (click)="logout()" class="logout-button">Logout</button>
+      </div>
+    </div>
+  </nav>
+  
