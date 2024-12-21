@@ -97,8 +97,7 @@ This project is a recipe platform built using a microservices architecture. It c
    ```
 
 3. Frontend Setup
-  The frontend for this project is available in a separate repository. Please follow the instructions in the                
-  [microservice-  frontend GitHub repository](https://github.com/moussaramzi/microservice-fontend) to set up and run the 
+  The frontend for this project is available in a separate repository. Please follow the instructions in the [microservice-  frontend GitHub repository](https://github.com/moussaramzi/microservice-fontend) to set up and run the 
   frontend application. 
 
 4. Access the application:
