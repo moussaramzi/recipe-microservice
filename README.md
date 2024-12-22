@@ -149,6 +149,11 @@ This project is a recipe platform built using a microservices architecture. It c
 
 - `POST /api/users`: Register a new user.
   ![image](https://github.com/user-attachments/assets/dfb85b6c-f1ab-499e-a5c0-7d293e36245d)
+  
+- `DELETE /api/users/{id}`: Delete a user.
+  ![image](https://github.com/user-attachments/assets/ab52b30c-3adb-4489-a155-eb9efec94b72)
+
+
 
 
 
