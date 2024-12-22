@@ -1,6 +1,6 @@
 # Recipe Platform Project
 
-This project is a recipe platform where u can create and edit recipes aswel as leave comments on a recipe. It is built using a microservices architecture. It consists of three core microservices and an API Gateway to manage and coordinate requests. Below is a detailed description of the project structure, the databases used, and the features provided.
+This project is a recipe platform where u can create and edit recipes aswel as leave comments on a recipe. It is built using a microservices architecture. It consists of three core microservices and an API Gateway to manage and coordinate requests, i also built a frontend for the microservices to display, add and edit information. Below is a detailed description of the project structure, the databases used, and the features provided. i completed number 1 and 2.1
 
 ## Project Structure
 
