@@ -1,7 +1,7 @@
 import { Component, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from '../models/user.model';
 import { jwtDecode } from 'jwt-decode';
 import { AuthService } from '../auth.service';
@@ -76,10 +76,14 @@ export class LoginComponent implements AfterViewInit {
       profilePicture,
       bio: null,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
-
-    this.http.post<User>(`${environment.apiGatewayUrl}/api/users`, newUser).subscribe(
+  
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+  
+    this.http.post<User>(`${environment.apiGatewayUrl}/api/users`, newUser, { headers }).subscribe(
       (user) => {
         this.storeUserData(user, token);
       },
@@ -88,6 +92,7 @@ export class LoginComponent implements AfterViewInit {
       }
     );
   }
+  
 
   storeUserData(user: User, token: string) {
     console.log('Storing user data:', user, token); // Debug log
