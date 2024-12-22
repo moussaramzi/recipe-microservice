@@ -115,19 +115,41 @@ This project is a recipe platform built using a microservices architecture. It c
 
 ### Recipe Service
 - `GET /api/recipes`: Fetch all recipes.
+  ![image](https://github.com/user-attachments/assets/80d631a1-498a-41fd-8057-4198a8a676a1)
+
 - `POST /api/recipes`: Create a new recipe.
+  ![image](https://github.com/user-attachments/assets/d5566d6e-736a-48df-a481-a36e50928dba)
+
 - `PUT /api/recipes/{id}`: Update a recipe.
+  ![image](https://github.com/user-attachments/assets/99f0d6d4-b413-4dc8-a81a-59cd81dc4ddc)
+
 - `DELETE /api/recipes/{id}`: Delete a recipe.
+  ![image](https://github.com/user-attachments/assets/236a3994-bc30-4d28-ad08-75abe261f3b7)
+
 
 ### Comment Service
 - `POST /api/comments`: Add a new comment.
-- `GET /api/comments?recipeId={id}`: Fetch comments for a recipe.
+  ![image](https://github.com/user-attachments/assets/2a285671-0a6b-4871-a12b-fedb0743c077)
+
 - `POST /api/comments/by-recipe-ids`: Fetch comments for multiple recipes.
+  ![image](https://github.com/user-attachments/assets/ed94f73e-7164-4449-b608-66a1af8f8c11)
+  ![image](https://github.com/user-attachments/assets/e59685ce-b7e2-4991-9cfc-1d6c99ea4072)
+
+
 
 ### User Service
+- `GET /api/users`: Fetch all users.
+  ![image](https://github.com/user-attachments/assets/35159fb7-6c1f-48e7-8463-2ac662096345)
+
 - `GET /api/users/{id}`: Fetch user details by ID.
+  ![image](https://github.com/user-attachments/assets/069e2a9c-2343-46ef-b911-3eb6f6199860)
+
 - `GET /api/users?email={email}`: Fetch user details by email.
+  ![image](https://github.com/user-attachments/assets/0cd84310-f4d3-434f-ad0a-ced4f2f75cca)
+
 - `POST /api/users`: Register a new user.
+  ![image](https://github.com/user-attachments/assets/dfb85b6c-f1ab-499e-a5c0-7d293e36245d)
+
 
 
 
